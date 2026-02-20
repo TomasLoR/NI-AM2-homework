@@ -1,0 +1,1 @@
+**loaded** stav je aktivní velice krátce, ve screenshotech rozhraní tak není
