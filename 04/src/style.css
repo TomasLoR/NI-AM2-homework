@@ -1,0 +1,7 @@
+#chat {
+    width: 25em;
+    height: 18.75em;
+    border: 0.0625em solid #ccc;
+    overflow-y: scroll;
+    margin-bottom: 0.625em;
+}
