@@ -1,0 +1,75 @@
+@authUrl = http://localhost:8080
+@apiUrl = http://localhost:8081
+@adminUsername = admin
+@adminPassword = password
+@userUsername = user
+@userPassword = password
+
+### 1. Login as Admin
+# @name adminLogin
+POST {{authUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{adminUsername}}",
+  "password": "{{adminPassword}}"
+}
+
+### 
+
+@adminAccessToken = {{adminLogin.response.body.accessToken}}
+@adminRefreshToken = {{adminLogin.response.body.refreshToken}}
+
+### 2. Access Admin Data
+GET {{apiUrl}}/data/any
+Authorization: Bearer {{adminAccessToken}}
+
+### 3. Access User Data as Admin
+GET {{apiUrl}}/data/own
+Authorization: Bearer {{adminAccessToken}}
+
+### 4. Admin Refresh Token
+POST {{authUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "token": "{{adminRefreshToken}}"
+}
+
+### 5. Login as User
+# @name userLogin
+POST {{authUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{userUsername}}",
+  "password": "{{userPassword}}"
+}
+
+###
+
+@userAccessToken = {{userLogin.response.body.accessToken}}
+@userRefreshToken = {{userLogin.response.body.refreshToken}}
+
+### 6. Access User Data
+GET {{apiUrl}}/data/own
+Authorization: Bearer {{userAccessToken}}
+
+### 7. Access Admin Data as User
+GET {{apiUrl}}/data/any
+Authorization: Bearer {{userAccessToken}}
+
+### 8. Access without token
+GET {{apiUrl}}/data/any
+
+### 9. Access after token expiration
+GET {{apiUrl}}/data/own
+Authorization: Bearer {{userAccessToken}}
+
+### 10. User Refresh Token
+POST {{authUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "token": "{{userRefreshToken}}"
+}
